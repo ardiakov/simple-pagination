@@ -1,0 +1,27 @@
+{
+    "name": "ardiakov/simple-pagination",
+    "description": "Simple pagination class",
+    "type": "library",
+    "authors": [
+        {
+            "name": "ardiakov",
+            "email": "adiakov.work@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ardiakov\\Pagination\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ardiakov\\Pagination\\Tests\\": "tests"
+        }
+    }
+}
