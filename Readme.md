@@ -1,4 +1,4 @@
-composer require ardiakov/paginator
+composer require ardiakov/simple-pagination
 
 Схематичный пример использования пагинации на примере doctrine/dbal
 
