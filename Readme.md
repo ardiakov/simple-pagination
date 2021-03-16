@@ -1,3 +1,5 @@
+composer require ardiakov/paginator
+
 Схематичный пример использования пагинации на примере doctrine/dbal
 
 ```php
