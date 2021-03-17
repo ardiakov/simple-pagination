@@ -1,0 +1,79 @@
+{% block pagination %}
+  <div class="row">
+    <div class="col-sm-12 col-md-5">
+      <div class="dataTables_info">
+        Всего {{ totalResult }} записей
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-7">
+
+      <div class="dataTables_paginate paging_simple_numbers">
+        {% if pages > 0 %}
+          <ul class="pagination">
+            {% set previousButton = false %}
+            {% if currentPage <= pages and currentPage is not same as(1) %}
+              {% set previousButton = true %}
+            {% endif %}
+
+            {% set nextButton = false %}
+            {% if currentPage < pages and currentPage is not same as(pages) %}
+              {% set nextButton = true %}
+            {% endif %}
+
+            <li class="paginate_button page-item previous {{ previousButton ? '' : 'disabled' }}">
+              <a href="{{ path(routeName, routeParameters|merge({'page': currentPage - 1})) }}"
+                 class="page-link">Предыдущая</a>
+            </li>
+
+            {% if pages < 6 %}
+
+              {% for page in 1..pages %}
+                <li class="paginate_button page-item {{ currentPage is same as(page) ? 'active' : '' }}">
+                  <a href="{{ path(routeName, routeParameters|merge({'page': page})) }}" class="page-link">{{ page }}</a>
+                </li>
+              {% endfor %}
+
+            {% else %}
+
+              <li class="paginate_button page-item {{ 1 == currentPage ? 'active' : '' }}">
+                <a href="{{ path(routeName, routeParameters|merge({'page': 1})) }}" class="page-link">{{ 1 }}</a>
+              </li>
+
+              {% if 2 == currentPage %}
+                <li class="paginate_button page-item active">
+                  <a href="{{ path(routeName, routeParameters|merge({'page': 2})) }}" class="page-link">{{ 2 }}</a>
+                </li>
+              {% endif %}
+
+              <span style="margin: 0 10px;"> ... </span>
+
+              {% if currentPage > 2 and currentPage < (pages - 1) %}
+                <li class="paginate_button page-item active">
+                  <a href="{{ path(routeName, routeParameters|merge({'page': currentPage})) }}" class="page-link">{{ currentPage }}</a>
+                </li>
+                <span style="margin: 0 10px;"> ... </span>
+              {% endif %}
+
+
+              {% if (pages - 1) == currentPage %}
+                <li class="paginate_button page-item active">
+                  <a href="{{ path(routeName, routeParameters|merge({'page': pages - 1})) }}" class="page-link">{{ pages - 1 }}</a>
+                </li>
+              {% endif %}
+
+              <li class="paginate_button page-item {{ pages == currentPage ? 'active' : '' }}">
+                <a href="{{ path(routeName, routeParameters|merge({'page': pages})) }}" class="page-link">{{ pages }}</a>
+              </li>
+
+            {% endif %}
+
+            <li class="paginate_button page-item previous {{ nextButton ? '' : 'disabled' }}">
+              <a href="{{ path(routeName, routeParameters|merge({'page': currentPage + 1})) }}"
+                 class="page-link">Следующая</a>
+            </li>
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

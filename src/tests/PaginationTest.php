@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Ardiakov\Pagination\Tests;
 
+use Ardiakov\Pagination\DataProviders\DataProvider;
 use Ardiakov\Pagination\Exceptions\PageIsOutOfRange;
 use Ardiakov\Pagination\Exceptions\PageMustBeAPositiveInteger;
-use Ardiakov\Pagination\Pagination;
+use Ardiakov\Pagination\Paginator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,7 +22,11 @@ class PaginationTest extends TestCase
      */
     public function test(int $perPage, int $currentPage, int $totalItems, int $expectedOffset, int $expectedCountPages): void
     {
-        $pagination = new Pagination($perPage, $currentPage, $totalItems);
+        $dataProvider = $this->createMock(DataProvider::class);
+        $dataProvider->method('count')->willReturn($totalItems);
+        $dataProvider->method('result')->willReturn([]);
+
+        $pagination = new Paginator($perPage, $currentPage, $dataProvider);
         $this->assertEquals($expectedOffset, $pagination->offset());
         $this->assertEquals($expectedCountPages, $pagination->pages());
     }
@@ -40,8 +45,12 @@ class PaginationTest extends TestCase
      */
     public function testPageMustBeAPositiveIntegerException(int $perPage, int $currentPage, int $totalItems): void
     {
+        $dataProvider = $this->createMock(DataProvider::class);
+        $dataProvider->method('count')->willReturn($totalItems);
+        $dataProvider->method('result')->willReturn([]);
+
         $this->expectException(PageMustBeAPositiveInteger::class);
-        (new Pagination($perPage, $currentPage, $totalItems))->offset();
+        (new Paginator($perPage, $currentPage, $dataProvider))->offset();
     }
 
     public function pageMustBeAPositiveIntegerExceptionDataProvider(): array
@@ -54,7 +63,11 @@ class PaginationTest extends TestCase
 
     public function testPageIsOutOfRangeException(): void
     {
+        $dataProvider = $this->createMock(DataProvider::class);
+        $dataProvider->method('count')->willReturn(0);
+        $dataProvider->method('result')->willReturn([]);
+
         $this->expectException(PageIsOutOfRange::class);
-        (new Pagination(10, 12, 101))->offset();
+        (new Paginator(10, 12, $dataProvider))->offset();
     }
 }

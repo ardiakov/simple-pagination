@@ -1,21 +1,35 @@
-composer require ardiakov/simple-pagination
-
-Схематичный пример использования пагинации на примере doctrine/dbal
+Пример использования пагинации на примере doctrine/orm
 
 ```php
-    $pagination = new Pagination($this->perPage, $this->currentPage, $countTotalApplications);
+    $perPage     = 20;
+    $currentPage = (int) $request->query->get('page', 1);
 
-    $list = $this->queryBuilderByConditions($this->conditions())
-                ->setMaxResults($pagination->maxResults())
-                ->setFirstResult($pagination->offset())
-                ->execute()
-                ->fetchAll();
+    $qb         = $this->repository->paginationQuery();
+    $pagination = new Paginator($perPage, $currentPage, new DoctrineOrmDataProvider($qb));
 
     return [
-        'list'         => $list,
-        'currentPage'  => $this->currentPage,
-        'perPage'      => $this->perPage,
-        'pages'        => $pagination->pages(),
-        'totalResults' => $countTotalApplications,
-    ]; 
+        'list'        => $pagination->result(),
+        'currentPage' => $currentPage,
+        'pages'       => $pagination->pages(),
+        'totalResult' => $pagination->countResult(),
+    ];
+```
+
+Подключение twig шаблона
+
+```yaml
+   # app/config/config.yml
+   twig:
+       # ...
+       paths:
+           '%kernel.project_dir%/vendor/ardiakov/simple-pagination/resources/templates': simple-pagination
+```
+
+Вывести шаблон в нужном месте
+
+```twig
+    {% include '@simple-pagination/_pagination.html.twig' with {
+        'routeName': 'worki_vacancy_list',
+        'routeParameters': {}
+    } %}
 ```
