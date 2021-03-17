@@ -22,7 +22,7 @@
    twig:
        # ...
        paths:
-           '%kernel.project_dir%/vendor/ardiakov/simple-pagination/resources/templates': simple-pagination
+           '%kernel.project_dir%/vendor/ardiakov/simple-pagination/src/resources/templates': simple-pagination
 ```
 
 Вывести шаблон в нужном месте
